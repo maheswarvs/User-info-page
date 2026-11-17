@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign up</title>
+<style>
+:root{
+  --red:#e53935;
+  --red-dark:#c62828;
+  --red-deep:#b71c1c;
+  --blush:#ffe3df;
+  --blush-2:#ffd0ca;
+  --field:#f3f4f8;
+  --ink:#2b2b33;
+  --muted:#8a8b96;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{
+  font-family:"Poppins","Segoe UI",system-ui,sans-serif;
+  color:var(--ink);
+  background:linear-gradient(to bottom,var(--blush) 0,var(--blush) 38%,var(--red) 38%,var(--red) 100%);
+  background-attachment:fixed;
+  min-height:100vh;
+  padding:40px 16px;
+  position:relative;
+  overflow-x:hidden;
+}
+/* soft circles like the reference */
+body::before,body::after{
+  content:"";position:fixed;border-radius:50%;z-index:0;pointer-events:none;
+  background:linear-gradient(160deg,rgba(255,255,255,.55),rgba(255,255,255,.08));
+}
+body::before{width:300px;height:300px;top:-90px;left:52%}
+body::after{width:260px;height:260px;bottom:-80px;left:6%}
+
+.card{
+  position:relative;z-index:1;
+  max-width:760px;margin:0 auto;
+  background:#fff;border-radius:18px;
+  padding:34px 44px 40px;
+  box-shadow:0 18px 50px rgba(120,20,20,.22);
+}
+.top-link{text-align:right;font-size:12px}
+.top-link a{color:var(--red);font-weight:600;text-decoration:none}
+h1{text-align:center;font-size:20px;font-weight:600;margin-top:4px}
+.section-title{font-size:15px;font-weight:600;margin:26px 0 14px}
+
+.steps{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px 0 6px;font-size:11px}
+.step{display:flex;flex-direction:column;align-items:center;gap:6px;width:110px}
+.dot{width:16px;height:16px;border-radius:50%;background:#eceef3;color:var(--muted);font-size:9px;display:grid;place-items:center;font-weight:600}
+.step.on .dot{background:var(--red);color:#fff}
+.line{flex:0 0 90px;height:1px;background:#ddd;margin-bottom:20px}
+
+.row{display:grid;grid-template-columns:1fr 1fr;gap:20px 24px}
+.full{grid-column:1/-1}
+label.lbl{display:block;font-size:12px;font-weight:500;margin:0 0 7px 4px}
+.input,select{
+  width:100%;height:40px;border:1.5px solid transparent;border-radius:12px;
+  background:var(--field);padding:0 14px;font:inherit;font-size:13px;color:var(--ink);
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23555' stroke-width='1.6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center}
+.input::placeholder{color:#b6b7c2}
+.input:focus,select:focus{outline:none;background:#fff;border-color:var(--red);box-shadow:0 0 0 4px rgba(229,57,53,.14)}
+.input.bad,select.bad{border-color:var(--red-deep);background:#fff6f5}
+.err{display:none;font-size:11px;color:var(--red-deep);margin:5px 0 0 4px}
+.err.show{display:block}
+
+.radios{display:flex;gap:26px;height:40px;align-items:center;padding-left:4px}
+.radio{display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer}
+.radio input{position:absolute;opacity:0}
+.radio .mark{width:20px;height:20px;border-radius:50%;border:1.5px solid #cfd1da;background:#fff;display:grid;place-items:center;transition:.15s}
+.radio input:checked + .mark{background:var(--red);border-color:var(--red)}
+.radio input:checked + .mark::after{content:"";width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.radio input:focus-visible + .mark{box-shadow:0 0 0 4px rgba(229,57,53,.2)}
+
+.actions{display:flex;justify-content:center;gap:12px;margin-top:34px}
+.btn{
+  border:0;border-radius:999px;padding:11px 34px;font:inherit;font-size:12px;font-weight:600;
+  background:var(--red);color:#fff;cursor:pointer;text-decoration:none;display:inline-block;
+  box-shadow:0 6px 16px rgba(229,57,53,.35);transition:transform .12s, background .15s;
+}
+.btn:hover{background:var(--red-dark)}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:none}
+.btn.ghost:hover{background:var(--field)}
+.btn:focus-visible{outline:3px solid rgba(229,57,53,.35);outline-offset:2px}
+
+/* display page */
+.profile{display:flex;flex-direction:column;align-items:center;margin:22px 0 8px}
+.avatar{width:76px;height:76px;border-radius:50%;background:var(--red);color:#fff;font-size:30px;font-weight:600;display:grid;place-items:center;box-shadow:0 8px 20px rgba(229,57,53,.4)}
+.profile h2{font-size:18px;margin-top:12px}
+.profile p{font-size:12px;color:var(--muted)}
+.details{background:var(--field);border-radius:14px;padding:6px 22px;margin-top:20px}
+.item{display:grid;grid-template-columns:150px 1fr;gap:10px;padding:13px 0;border-bottom:1px solid #e4e5ec;font-size:13px}
+.item:last-child{border-bottom:0}
+.item span{color:var(--muted)}
+.item b{font-weight:600;word-break:break-word}
+.empty{text-align:center;padding:40px 0 10px;color:var(--muted);font-size:14px}
+
+@media (max-width:640px){
+  .card{padding:26px 20px 30px}
+  .row{grid-template-columns:1fr}
+  .line{flex-basis:30px}
+  .item{grid-template-columns:110px 1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="card">
+  <p class="top-link">Already a member? <a href="display.html">View details</a></p>
+  <h1>Sign up</h1>
+
+  <div class="steps" aria-hidden="true">
+    <div class="step on"><div class="dot">1</div>Basic Details</div>
+    <div class="line"></div>
+    <div class="step"><div class="dot">2</div>Contact Details</div>
+    <div class="line"></div>
+    <div class="step"><div class="dot">3</div>Verification</div>
+  </div>
+
+  <form id="regForm" novalidate>
+    <h2 class="section-title">Basic Details</h2>
+    <div class="row">
+      <div class="full">
+        <label class="lbl" for="name">Full Name</label>
+        <input class="input" id="name" type="text" placeholder="Enter full name" autocomplete="name">
+        <p class="err" id="nameErr">Enter your full name (letters only, at least 3 characters).</p>
+      </div>
+
+      <div class="full">
+        <span class="lbl" style="display:block;font-size:12px;font-weight:500;margin:0 0 4px 4px">Gender</span>
+        <div class="radios" role="radiogroup" aria-label="Gender">
+          <label class="radio"><input type="radio" name="gender" value="Male" checked><span class="mark"></span>Male</label>
+          <label class="radio"><input type="radio" name="gender" value="Female"><span class="mark"></span>Female</label>
+          <label class="radio"><input type="radio" name="gender" value="Other"><span class="mark"></span>Other</label>
+        </div>
+      </div>
+
+      <div>
+        <label class="lbl" for="mobile">Mobile Number</label>
+        <input class="input" id="mobile" type="tel" inputmode="numeric" maxlength="10" placeholder="10-digit mobile number" autocomplete="tel">
+        <p class="err" id="mobileErr">Enter a valid 10-digit mobile number.</p>
+      </div>
+      <div>
+        <label class="lbl" for="email">Mail ID</label>
+        <input class="input" id="email" type="email" placeholder="name@example.com" autocomplete="email">
+        <p class="err" id="emailErr">Enter a valid email address.</p>
+      </div>
+    </div>
+
+    <h2 class="section-title">Address</h2>
+    <div class="row">
+      <div>
+        <label class="lbl" for="city">City</label>
+        <input class="input" id="city" type="text" placeholder="Enter city" autocomplete="address-level2">
+        <p class="err" id="cityErr">Enter your city.</p>
+      </div>
+      <div>
+        <label class="lbl" for="state">State</label>
+        <input class="input" id="state" type="text" placeholder="Enter state" autocomplete="address-level1">
+        <p class="err" id="stateErr">Enter your state.</p>
+      </div>
+      <div class="full">
+        <label class="lbl" for="country">Country</label>
+        <select id="country">
+          <option value="">- Select Country -</option>
+          <option>India</option>
+          <option>United States</option>
+          <option>United Kingdom</option>
+          <option>Canada</option>
+          <option>Australia</option>
+          <option>Germany</option>
+          <option>Singapore</option>
+          <option>United Arab Emirates</option>
+          <option>Other</option>
+        </select>
+        <p class="err" id="countryErr">Select your country.</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="reset" class="btn ghost" id="resetBtn">Clear</button>
+      <button type="submit" class="btn">Save &amp; Continue</button>
+    </div>
+  </form>
+</main>
+
+<script>
+const form = document.getElementById("regForm");
+const fields = ["name", "mobile", "email", "city", "state", "country"];
+
+const rules = {
+  name:    v => /^[A-Za-z][A-Za-z .'-]{2,}$/.test(v),
+  mobile:  v => /^[6-9]\d{9}$/.test(v),
+  email:   v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v),
+  city:    v => v.length > 1,
+  state:   v => v.length > 1,
+  country: v => v !== ""
+};
+
+function check(id) {
+  const el = document.getElementById(id);
+  const ok = rules[id](el.value.trim());
+  el.classList.toggle("bad", !ok);
+  document.getElementById(id + "Err").classList.toggle("show", !ok);
+  return ok;
+}
+
+// only digits in the mobile field
+document.getElementById("mobile").addEventListener("input", e => {
+  e.target.value = e.target.value.replace(/\D/g, "");
+});
+
+fields.forEach(id => {
+  const el = document.getElementById(id);
+  el.addEventListener("blur", () => check(id));
+  el.addEventListener("input", () => { if (el.classList.contains("bad")) check(id); });
+});
+
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const allOk = fields.map(check).every(Boolean);
+  if (!allOk) {
+    document.querySelector(".bad").focus();
+    return;
+  }
+  const data = {
+    name:    document.getElementById("name").value.trim(),
+    gender:  form.querySelector('input[name="gender"]:checked').value,
+    mobile:  document.getElementById("mobile").value.trim(),
+    email:   document.getElementById("email").value.trim(),
+    city:    document.getElementById("city").value.trim(),
+    state:   document.getElementById("state").value.trim(),
+    country: document.getElementById("country").value
+  };
+  try {
+    localStorage.setItem("userInfo", JSON.stringify(data));
+  } catch (err) {
+    sessionStorage.setItem("userInfo", JSON.stringify(data));
+  }
+  window.location.href = "display.html";
+});
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  setTimeout(() => {
+    fields.forEach(id => {
+      document.getElementById(id).classList.remove("bad");
+      document.getElementById(id + "Err").classList.remove("show");
+    });
+  }, 0);
+});
+
+// refill the form when coming back from the display page to edit
+(function prefill() {
+  let raw = null;
+  try { raw = localStorage.getItem("userInfo") || sessionStorage.getItem("userInfo"); } catch (e) {}
+  if (!raw || !location.hash.includes("edit")) return;
+  const d = JSON.parse(raw);
+  fields.forEach(id => { document.getElementById(id).value = d[id] || ""; });
+  const g = form.querySelector('input[name="gender"][value="' + d.gender + '"]');
+  if (g) g.checked = true;
+})();
+</script>
+</body>
+</html>
